@@ -1,0 +1,25 @@
+\documentclass[11pt]{article}
+\usepackage{vaucanson-g}
+\begin{document}
+\begin{VCPicture}{(0,0)(12,10)}
+%10 states
+\State[q0]{(0.425,10.925)}{Q0} \State[q1]{(11.175,11.625)}{Q1} \State[q9]{(4,4.6)}{Q10}
+\State[q10]{(12.675,3.6)}{Q11} \State[q2]{(0.2,4.075)}{Q2} \State[q3]{(-3.075,2.225)}{Q3}
+\State[q4]{(1.525,0.75)}{Q4} \FinalState[q6]{(2.75,7.925)}{Q7} \State[q7]{(20.125,3.675)}{Q8}
+\State[q8]{(6.675,5.35)}{Q9}
+%1 initial-final
+\Initial{Q0}
+%21 transitions
+\EdgeL{Q0}{Q1}{A-Za-z} \EdgeL{Q0}{Q2}{0-9}
+\LoopNW{Q1}{A-Za-z0-9} \ArcL{Q1}{Q0}{=}
+\ArcL[0.45]{Q1}{Q8}{/,*,%} \EdgeL{Q1}{Q7}{;}
+\ArcL[0.45]{Q1}{Q9}{+} \ArcL{Q1}{Q11}{-}
+\EdgeL{Q10}{Q7}{;} \ArcL{Q11}{Q10}{-}
+\ArcL[0.45]{Q11}{Q1}{A-Za-z} \LoopNW[0.5]{Q2}{0-9}
+\ArcL[0.5]{Q2}{Q4}{+,-,/,*,%} \EdgeL[0.5]{Q2}{Q7}{;}
+\ArcL[0.5]{Q2}{Q3}{.} \ArcL[0.5]{Q3}{Q2}{0-9}
+\ArcL[0.5]{Q4}{Q2}{0-9} \ArcL{Q8}{Q1}{A-Za-z}
+\ArcL[0.45]{Q8}{Q2}{0-9} \EdgeL{Q9}{Q10}{+}
+\ArcL{Q9}{Q1}{A-Za-z}
+\end{VCPicture}
+\end{document}
