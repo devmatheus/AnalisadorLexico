@@ -2,27 +2,13 @@ package analisador.lexico;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashMap;;
 import java.util.Map.Entry;
 import javax.swing.JOptionPane;
 
 public class AnalisadorLexico 
 {
-    public static void main(String[] args) throws Exception
-    {
-        //String enderecoArquivo = JOptionPane.showInputDialog("Endereço do arquivo");
-        String enderecoArquivo = "file.txt";
-        
-        String[][] estados = new String[4][4];
-        estados[0][1] = "[A-Za-z]";
-        estados[0][2] = "[0-9]";
-        estados[0][3] = "[\\s]";
-        estados[1][1] = "[A-Za-z0-9]";
-        estados[1][3] = "[*/.,-=\\s]";
-        estados[2][2] = "[0-9]";
-        estados[2][3] = "[*/.,-=\\s]";
-        
+    public static void classifica(String token) {
         
         ArrayList<String> palavrasReservadas = new ArrayList();
         palavrasReservadas.add("if");
@@ -39,6 +25,28 @@ public class AnalisadorLexico
         HashMap<String,ArrayList> listas = new HashMap();
         listas.put("Palavras Reservadas", palavrasReservadas);
         
+        for (Entry<String, ArrayList> entry : listas.entrySet()) {
+            if (token.substring(token.length()-1).equals(" ") && token.length()-1>0) {
+                token = token.substring(0,token.length()-1);
+                if (entry.getValue().contains(token)) {
+                    System.out.println(token + " pertence a " + entry.getKey());
+                } else {
+                    System.out.println(token + " não reconhecido");
+                }
+                System.out.println("espaço em branco");
+            } else {
+                System.out.println("espaço em branco");
+            }
+        }
+    }
+    
+    public static void main(String[] args) throws Exception
+    {
+        //String enderecoArquivo = JOptionPane.showInputDialog("Endereço do arquivo");
+        String enderecoArquivo = "file.txt";
+        
+        String[][] estados = new String[10][10];
+        
         BufferedReader bufferFile = new BufferedReader(new FileReader(new File(enderecoArquivo)));
         char letra;
         String token = "";
@@ -46,28 +54,18 @@ public class AnalisadorLexico
         
         while (bufferFile.ready()) {
             letra = (char) bufferFile.read();
-            for (i=0;i<4;i++) {
+            for (i=0;i<5;i++) {
                 if (estados[estado][i] != null &&
                         String.valueOf(letra).matches(estados[estado][i])) {
                     estado = i;
+                    token += letra;
                     break;
                 }
             }
-            if (estado == 3) {
-                for (Entry<String, ArrayList> entry : listas.entrySet()) {
-                    if (entry.getValue().contains(token)) {
-                        System.out.println(token + " pertence a " + entry.getKey());
-                    } else if (token.equals(" ")) {
-                        System.out.println("espaço em branco ignorado");
-                    } else {
-                        System.out.println(token + " não reconhecido");
-                    }
-                }
-                
-                token = String.valueOf(letra);
+            if (estado == 3 || estado == 4) {
+                AnalisadorLexico.classifica(token);
+                token = "";
                 estado = 0;
-            } else {
-                token += letra;
             }
         }
     }
